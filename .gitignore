@@ -1,0 +1,82 @@
+# ------------------------
+# 🗃️ Miscellaneous
+# ------------------------
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# ------------------------
+# 💻 IntelliJ / JetBrains
+# ------------------------
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# ------------------------
+# 🧪 VS Code
+# ------------------------
+# Uncomment if you want to ignore local VS Code settings
+#.vscode/
+
+# ------------------------
+# 🐦 Flutter / Dart / Pub
+# ------------------------
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# ------------------------
+# 🧩 Symbolication
+# ------------------------
+app.*.symbols
+
+# ------------------------
+# 🔐 Obfuscation
+# ------------------------
+app.*.map.json
+
+# ------------------------
+# 📦 Android Studio builds
+# ------------------------
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# ------------------------
+# 🐍 Python (Flask backend)
+# ------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+env/
+venv/
+.env
+.env.*  # e.g. .env.development
+
+# If backend builds artifacts (like model files), exclude them:
+backend/*.joblib
+backend/*.pkl
+
+# ------------------------
+# ⚙️ System
+# ------------------------
+Thumbs.db
+ehthumbs.db
+desktop.ini
