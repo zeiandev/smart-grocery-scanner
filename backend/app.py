@@ -5,22 +5,22 @@ import easyocr
 import numpy as np
 import cv2
 import os
+import gc
 from predict import predict_items, preprocess_image
 from memory_monitor import start_memory_monitor
-import gc
 
-# force Git to track this file
-
+# Start memory monitoring in background
 start_memory_monitor()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable CORS for Flutter/web apps
 
 # Lazy-load model and vectorizer
 def get_model():
     if not hasattr(get_model, "model") or not hasattr(get_model, "vectorizer"):
-        get_model.model = joblib.load("model.joblib")
-        get_model.vectorizer = joblib.load("vectorizer.joblib")
+        base_dir = os.path.dirname(__file__)
+        get_model.model = joblib.load(os.path.join(base_dir, "model.joblib"))
+        get_model.vectorizer = joblib.load(os.path.join(base_dir, "vectorizer.joblib"))
         print("✅ Model and vectorizer loaded.")
     return get_model.model, get_model.vectorizer
 
@@ -46,20 +46,20 @@ def scan_receipt():
     if image is None:
         return jsonify({'error': 'Invalid image'}), 400
 
-    # Preprocess image before OCR
+    # Preprocess image for OCR
     preprocessed = preprocess_image(image)
 
-    # Perform OCR
+    # OCR with EasyOCR
     reader = get_reader()
     ocr_result = reader.readtext(preprocessed)
     print(f"🔍 OCR Output Length: {len(ocr_result)} lines")
 
-    # Load model and make predictions
+    # Predict expiry using model
     model, vectorizer = get_model()
     predictions = predict_items(ocr_result, model, vectorizer)
     print("✅ Final Predictions:", predictions)
 
-    # Cleanup to free memory
+    # Cleanup memory
     del image, image_bytes, preprocessed, ocr_result
     gc.collect()
 

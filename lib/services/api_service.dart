@@ -1,29 +1,33 @@
-
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String _baseUrl = 'http://127.0.0.1:5000'; // make sure this is updated
-  // static const String _baseUrl = 'http://127.0.0.1:5000';
-  static Future<List<dynamic>> sendReceipts(List<Uint8List> images) async {
-    final uri = Uri.parse("$_baseUrl/scan"); //
-    final request = http.MultipartRequest('POST', uri);
+  static const String _baseUrl = 'https://smart-grocery-backend.onrender.com';
 
-    for (int i = 0; i < images.length; i++) {
-      request.files.add(http.MultipartFile.fromBytes(
-        'file',
-        images[i],
-        filename: 'receipt_$i.jpg',
-      ));
+  static Future<List<dynamic>> sendReceipts(List<Uint8List> images) async {
+    final uri = Uri.parse("$_baseUrl/scan");
+
+    if (images.isEmpty) {
+      print("🚫 No images provided.");
+      return [];
     }
 
-    print("📤 Uploading \${images.length} image(s) to API...");
+    final request = http.MultipartRequest('POST', uri);
+
+    // Send only the first image — match Flask expectation
+    request.files.add(http.MultipartFile.fromBytes(
+      'file',
+      images[0],
+      filename: 'receipt.jpg',
+    ));
+
+    print("📤 Uploading 1 image to API...");
 
     try {
       final response = await request.send();
       final result = await http.Response.fromStream(response);
-      print("🛰️ Raw response: \${result.body}");
+      print("🛰️ Raw response: ${result.body}");
 
       if (result.statusCode == 200) {
         final data = jsonDecode(result.body);
@@ -33,11 +37,11 @@ class ApiService {
         }
         return data['items_detected'];
       } else {
-        throw Exception("❌ Server error: \${result.body}");
+        throw Exception("❌ Server error: ${result.body}");
       }
-    } catch (e) {
-      print("🚫 Exception in sendReceipts: \$e");
-      print("🧱 Stack trace:\n\$stack");
+    } catch (e, stackTrace) {
+      print("🚫 Exception: ${e.toString()}");
+      print("🧱 Stack trace:\n$stackTrace");
       rethrow;
     }
   }
