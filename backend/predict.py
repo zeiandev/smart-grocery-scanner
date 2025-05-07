@@ -14,7 +14,7 @@ model = joblib.load(os.path.join(base_dir, "model.joblib"))
 vectorizer = joblib.load(os.path.join(base_dir, "vectorizer.joblib"))
 
 # Load reference product data
-df = pd.read_csv("dataset.csv")
+df = pd.read_csv(os.path.join(base_dir, "dataset.csv"))
 df["normalized"] = df["SKU"].str.replace(" ", "").str.lower()
 sku_to_name = dict(zip(df["normalized"], df["Product Name"]))
 sku_to_shelf_life = dict(zip(df["normalized"], df["shelf_life_days"]))
