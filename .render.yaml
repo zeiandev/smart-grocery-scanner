@@ -4,6 +4,7 @@ services:
     env: python
     buildCommand: pip install -r backend/requirements.txt
     startCommand: python backend/app.py
+    workingDir: backend
     envVars:
       - key: PYTHON_VERSION
         value: 3.11
