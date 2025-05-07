@@ -43,14 +43,34 @@ def scan_receipt():
         response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
         return response, 200
 
-    print("✅ Received POST to /scan — sending dummy response.")
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
 
-    return jsonify({
-        'items_detected': [
-            {'item': 'Milk', 'days_left': 3},
-            {'item': 'Eggs', 'days_left': 5}
-        ]
-    })
+    file = request.files['file']
+    image_bytes = np.frombuffer(file.read(), np.uint8)
+    image = cv2.imdecode(image_bytes, cv2.IMREAD_COLOR)
+
+    if image is None:
+        return jsonify({'error': 'Invalid image'}), 400
+
+    # Preprocess image for OCR
+    preprocessed = preprocess_image(image)
+
+    # OCR with EasyOCR
+    reader = get_reader()
+    ocr_result = reader.readtext(preprocessed)
+    print(f"🔍 OCR Output Length: {len(ocr_result)} lines")
+
+    # Predict expiry using model
+    model, vectorizer = get_model()
+    predictions = predict_items(ocr_result, model, vectorizer)
+    print("✅ Final Predictions:", predictions)
+
+    # Cleanup memory
+    del image, image_bytes, preprocessed, ocr_result
+    gc.collect()
+
+    return jsonify({'items_detected': predictions})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
