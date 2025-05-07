@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../services/api_service.dart';
+import '../services/web_api_service.dart';
 
 const Color kPrimaryGreen = Color(0xFF4CAF50);
 const Color kBackground = Color(0xFFF9FDF9);
@@ -24,10 +26,18 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   Future<void> _process() async {
     try {
-      final results = await ApiService.sendReceipts(widget.images);
-      Navigator.pop(context, results); // ✅ Return results to HomeScreen
+      dynamic results;
+
+      if (kIsWeb) {
+        await WebApiService.sendReceipt(widget.images.first);
+        results = []; // You can parse actual response later if needed
+      } else {
+        results = await ApiService.sendReceipts(widget.images);
+      }
+
+      Navigator.pop(context, results);
     } catch (e) {
-      Navigator.pop(context); // Even if error, go back safely
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: ${e.toString()}")),
       );
@@ -52,8 +62,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              "Scanning your receipt...",
-              textAlign: TextAlign.center,
+              "Scanning receipt...",
               style: TextStyle(fontSize: 16, color: kTextSecondary),
             ),
           ],
