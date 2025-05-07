@@ -71,8 +71,8 @@ venv/
 .env.*  # e.g. .env.development
 
 # If backend builds artifacts (like model files), exclude them:
-backend/*.joblib
-backend/*.pkl
+# backend/*.joblib
+# backend/*.pkl
 
 # ------------------------
 # ⚙️ System
