@@ -36,6 +36,14 @@ def home():
 
 @app.route('/scan', methods=['POST', 'OPTIONS'])
 def scan_receipt():
+    if request.method == 'OPTIONS':
+        # Handle CORS preflight request
+        response = jsonify({'message': 'CORS preflight passed'})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        return response
+
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
 

@@ -2,9 +2,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/foundation.dart';
 import '../services/api_service.dart';
-import '../services/web_api_service.dart';
 import 'receipt_preview_screen.dart';
 import 'loading_screen.dart';
 import 'result_screen.dart';
@@ -73,18 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (confirmed == null || confirmed.isEmpty) return;
 
-    dynamic results;
-    if (kIsWeb) {
-      await WebApiService.sendReceipt(confirmed.first);
-      results = [];
-    } else {
-      results = await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => LoadingScreen(images: confirmed)),
-      );
-    }
+    final results = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => LoadingScreen(images: confirmed)),
+    );
 
-    if (results != null && results.isNotEmpty) {
+    if (results != null) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => ResultScreen(items: results)),
