@@ -13,7 +13,7 @@ from memory_monitor import start_memory_monitor
 start_memory_monitor()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=False)
 
 # Lazy-load model and vectorizer
 def get_model():
@@ -34,7 +34,7 @@ def get_reader():
 def home():
     return "Smart Grocery Scanner Backend is running!"
 
-@app.route('/scan', methods=['POST'])
+@app.route('/scan', methods=['POST', 'OPTIONS'])
 def scan_receipt():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
