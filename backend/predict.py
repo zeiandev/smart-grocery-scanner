@@ -9,10 +9,9 @@ import os
 # force Git to track this file
 
 # Load model and vectorizer
-model_path = os.path.join(os.path.dirname(__file__), "model.joblib")
-model = joblib.load(model_path)
-vectorizer = joblib.load("vectorizer.joblib")
-vectorizer = joblib.load(vec_path)
+base_dir = os.path.dirname(__file__)
+model = joblib.load(os.path.join(base_dir, "model.joblib"))
+vectorizer = joblib.load(os.path.join(base_dir, "vectorizer.joblib"))
 
 # Load reference product data
 df = pd.read_csv("dataset.csv")
