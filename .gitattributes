@@ -1,2 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Tell GitHub to ignore native platform files in language stats
+android/** linguist-vendored
+ios/** linguist-vendored
+build/** linguist-generated
+.flutter-plugins linguist-generated
+.dart_tool linguist-generated
