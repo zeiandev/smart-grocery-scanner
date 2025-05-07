@@ -4,12 +4,15 @@ import joblib
 import numpy as np
 import re
 import cv2
+import os
 
 # force Git to track this file
 
 # Load model and vectorizer
-model = joblib.load("model.joblib")
+model_path = os.path.join(os.path.dirname(__file__), "model.joblib")
+model = joblib.load(model_path)
 vectorizer = joblib.load("vectorizer.joblib")
+vectorizer = joblib.load(vec_path)
 
 # Load reference product data
 df = pd.read_csv("dataset.csv")
