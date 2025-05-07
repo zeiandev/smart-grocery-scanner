@@ -13,7 +13,7 @@ from memory_monitor import start_memory_monitor
 start_memory_monitor()
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for Flutter/web apps
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Lazy-load model and vectorizer
 def get_model():
