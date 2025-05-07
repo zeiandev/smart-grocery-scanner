@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String _baseUrl = 'https://smart-grocery-scanner.onrender.com';
+  static const String _baseUrl = 'https://smart-grocery-backend.onrender.com';
 
   static Future<List<dynamic>> sendReceipts(List<Uint8List> images) async {
     final uri = Uri.parse("$_baseUrl/scan");

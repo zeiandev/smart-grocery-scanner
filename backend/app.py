@@ -13,7 +13,7 @@ from memory_monitor import start_memory_monitor
 start_memory_monitor()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 # Lazy-load model and vectorizer
 def get_model():
